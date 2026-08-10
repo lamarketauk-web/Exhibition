@@ -20,7 +20,7 @@ export default function Footer() {
             Reflections
           </Link>
           <a
-            href="https://instagram.com"
+            href="https://instagram.com/julystresss"
             target="_blank"
             rel="noopener noreferrer"
             className="transition-opacity hover:opacity-100"
@@ -30,9 +30,16 @@ export default function Footer() {
           </a>
         </div>
 
-        <p className="text-xs opacity-30">
-          &copy; {new Date().getFullYear()} Julio Parejo
-        </p>
+        <div className="text-center text-xs opacity-40 md:text-right">
+          <p>Built by Aurray</p>
+          <a
+            href="mailto:support@aurray.co.uk"
+            className="mt-1 block transition-opacity hover:opacity-100"
+            data-cursor-hover
+          >
+            support@aurray.co.uk
+          </a>
+        </div>
       </div>
     </footer>
   );

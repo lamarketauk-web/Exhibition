@@ -41,7 +41,7 @@ export default function AboutSection() {
             <FadeIn delay={0.2}>
               <p className="mt-6 leading-relaxed opacity-70">
                 <em>2025: A Year of Closing Cycles</em> is his most personal exhibition to date —
-                seven works that document a year of profound endings and hard-won renewal. Each piece
+                six works that document a year of profound endings and hard-won renewal. Each piece
                 is both autobiography and invitation: an open door for viewers to find their own
                 stories within his.
               </p>
@@ -60,7 +60,7 @@ export default function AboutSection() {
             <FadeIn delay={0.4}>
               <div className="mt-10 flex flex-wrap gap-6">
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/julystresss/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs tracking-[0.3em] uppercase opacity-50 transition-opacity hover:opacity-100"
@@ -69,7 +69,7 @@ export default function AboutSection() {
                   Instagram
                 </a>
                 <a
-                  href="mailto:hello@julioparejo.com"
+                  href="mailto:julystresss@gmail.com"
                   className="text-xs tracking-[0.3em] uppercase opacity-50 transition-opacity hover:opacity-100"
                   data-cursor-hover
                 >
