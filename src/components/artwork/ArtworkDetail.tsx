@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Artwork } from "@/data/artworks";
@@ -15,6 +16,18 @@ export default function ArtworkDetail({ artwork, prev, next }: ArtworkDetailProp
   return (
     <article>
       <section className={`relative flex min-h-[80vh] items-end bg-gradient-to-br ${artwork.gradient} artwork-gradient`}>
+        <Image
+          src={artwork.imageSrc}
+          alt={artwork.imageAlt}
+          fill
+          priority
+          className={
+            artwork.imageFit === "contain"
+              ? "object-contain p-2 md:p-4"
+              : "object-cover object-center"
+          }
+          sizes="100vw"
+        />
         <div className="absolute inset-0 bg-charcoal/40" />
         <div className="relative z-10 w-full px-6 pb-16 pt-32 md:px-12 md:pb-24">
           <FadeIn>
@@ -60,18 +73,20 @@ export default function ArtworkDetail({ artwork, prev, next }: ArtworkDetailProp
             <div
               className={`relative aspect-[4/3] overflow-hidden rounded-sm bg-gradient-to-br ${artwork.gradient} artwork-gradient`}
             >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 1.2 }}
-                  className="text-center"
-                >
-                  <p className="font-display text-2xl opacity-30 md:text-4xl">{artwork.title}</p>
-                  <p className="mt-2 text-xs tracking-widest uppercase opacity-20">
-                    Hover to explore details
-                  </p>
-                </motion.div>
-              </div>
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 1.2 }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={artwork.imageSrc}
+                  alt={artwork.imageAlt}
+                  fill
+                  className="object-contain p-2 md:p-4"
+                  sizes="(min-width: 768px) 80vw, 100vw"
+                />
+              </motion.div>
+              <div className="absolute inset-0 bg-charcoal/10" />
             </div>
           </FadeIn>
         </div>

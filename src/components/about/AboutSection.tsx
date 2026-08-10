@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import FadeIn from "@/components/ui/FadeIn";
 
 export default function AboutSection() {
@@ -9,14 +10,14 @@ export default function AboutSection() {
         <div className="grid gap-16 md:grid-cols-2 md:gap-24">
           <FadeIn>
             <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-violet-950 via-burgundy to-charcoal">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="mx-auto mb-6 flex h-32 w-32 items-center justify-center rounded-full border border-warm-white/20">
-                    <span className="font-display text-4xl text-warm-white/60">JP</span>
-                  </div>
-                  <p className="text-xs tracking-[0.3em] text-warm-white/40 uppercase">Portrait</p>
-                </div>
-              </div>
+              <Image
+                src="/About_Artist_Portrait.png"
+                alt="Portrait of Julio Parejo"
+                fill
+                className="object-cover object-center"
+                sizes="(min-width: 768px) 40vw, 100vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/30 via-transparent to-transparent" />
             </div>
           </FadeIn>
 

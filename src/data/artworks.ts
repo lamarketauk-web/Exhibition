@@ -4,8 +4,7 @@ export type HoverEffect =
   | "butterflies"
   | "heartbeat"
   | "smoke"
-  | "warmth"
-  | "roulette";
+  | "warmth";
 
 export interface Artwork {
   slug: string;
@@ -16,6 +15,9 @@ export interface Artwork {
   curatorNote: string;
   personalText: string;
   symbolism: string;
+  imageSrc: string;
+  imageAlt: string;
+  imageFit?: "cover" | "contain";
   gradient: string;
   accentColor: string;
   hoverEffect: HoverEffect;
@@ -36,6 +38,8 @@ export const artworks: Artwork[] = [
       "I painted this when I didn't know where I was going. The door was the only thing I could see — an invitation without a destination. It became my way of sitting with uncertainty instead of running from it.",
     symbolism:
       "The door represents choice without guarantee. Its slight opening on hover invites the viewer to lean in, to wonder what lies beyond — even when beyond remains undefined.",
+    imageSrc: "/DoortoNowhere.jpeg",
+    imageAlt: "Door to Nowhere artwork showing a solitary door opening into light within a dark void.",
     gradient: "from-slate-900 via-slate-800 to-indigo-950",
     accentColor: "#4A5568",
     hoverEffect: "door",
@@ -53,28 +57,12 @@ export const artworks: Artwork[] = [
     personalText:
       "Bankruptcy stripped away more than my savings. It stripped away who I thought I was. These coins are what was left when everything else was taken — small, cold, and still spinning.",
     symbolism:
-      "Coins represent value systems — both monetary and personal. Their rotation echoes the roulette of fate, foreshadowing the exhibition's final piece.",
+      "Coins represent value systems — both monetary and personal. Their rotation echoes how fortune can turn without warning.",
+    imageSrc: "/TheEmptyBank.jpeg",
+    imageAlt: "The Empty Bank artwork showing a vast empty vault interior with scattered coins on the floor.",
     gradient: "from-amber-950 via-stone-900 to-charcoal",
     accentColor: "#B8860B",
     hoverEffect: "coins",
-  },
-  {
-    slug: "reliquary",
-    title: "Reliquary",
-    year: 2025,
-    story:
-      "A vessel for what remains when someone is gone. Not ashes, not photographs — but the intangible relics of love: a voice remembered, a gesture preserved in muscle memory, a presence felt in empty rooms.",
-    meaning:
-      "Grief is not a problem to solve. It is a reliquary we carry — sacred, heavy, and strangely beautiful.",
-    curatorNote:
-      "Perhaps the emotional heart of the exhibition. Parejo's handling of loss avoids sentimentality while achieving profound tenderness. The butterflies that emerge on hover suggest transformation — the dead becoming something else, something winged.",
-    personalText:
-      "When my father passed, I didn't know what to keep. This painting is my answer: you keep the space they occupied. You keep the way the world changed shape around their absence.",
-    symbolism:
-      "The reliquary traditionally holds saintly remains. Here it holds memory — the most fragile and most enduring of all relics.",
-    gradient: "from-violet-950 via-purple-900 to-burgundy",
-    accentColor: "#8B7EC8",
-    hoverEffect: "butterflies",
   },
   {
     slug: "the-solitary-bed",
@@ -90,13 +78,15 @@ export const artworks: Artwork[] = [
       "I woke up alone for months after everything ended. The bed was the first place I felt it — this hollow beside me where someone used to breathe. I painted it to make the loneliness visible.",
     symbolism:
       "The bed is the most intimate domestic object. Its emptiness speaks of intimacy withdrawn — a private grief made public through art.",
+    imageSrc: "/Thesolitarybed.jpeg",
+    imageAlt: "The Solitary Bed artwork showing an unmade bed lit from one side by soft morning light.",
     gradient: "from-slate-950 via-gray-900 to-slate-800",
     accentColor: "#6B7280",
     hoverEffect: "heartbeat",
   },
   {
     slug: "the-warmth-of-home",
-    title: "The Warmth of Home",
+    title: "The Bubble of Home",
     year: 2025,
     story:
       "After displacement — Barcelona to London to Mexico — the search for home became its own journey. This piece captures the moment warmth returns: not a place, but a feeling.",
@@ -108,6 +98,8 @@ export const artworks: Artwork[] = [
       "I searched for home in cities and countries. I found it in a meal shared, in a room that smelled right, in the exhale of finally feeling safe. This painting is that exhale.",
     symbolism:
       "Warmth as both temperature and emotion. The drifting smoke connects to ancestral memory — altars, kitchens, the places where love is made tangible.",
+    imageSrc: "/TheWarmthofHome.jpeg",
+    imageAlt: "The Bubble of Home artwork showing glowing bowls in amber light and drifting smoke.",
     gradient: "from-orange-950 via-amber-900 to-yellow-900",
     accentColor: "#D97706",
     hoverEffect: "warmth",
@@ -126,27 +118,32 @@ export const artworks: Artwork[] = [
       "In Mexico I learned that grief doesn't have to be quiet. You can build an altar. You can invite the dead to dinner. You can paint them back into the world with marigolds and light.",
     symbolism:
       "Marigolds guide souls home. Candles illuminate the path. The altar is both memorial and invitation — death as continuity, not finality.",
+    imageSrc: "/AltaroftheDead.jpeg",
+    imageAlt: "Altar of the Dead artwork showing a Day of the Dead altar with candles, marigolds, and monarch butterflies.",
     gradient: "from-burgundy via-orange-950 to-amber-950",
     accentColor: "#C2410C",
     hoverEffect: "butterflies",
   },
   {
-    slug: "meaningless-roulette",
-    title: "Meaningless Roulette",
+    slug: "reliquary",
+    title: "Reliquary",
     year: 2025,
     story:
-      "The final piece. A roulette wheel spinning without stakes — or perhaps with everything at stake. After a year of endings, does chance mean anything? Or does meaning come from how we spin?",
+      "A vessel for what remains when someone is gone. Not ashes, not photographs — but the intangible relics of love: a voice remembered, a gesture preserved in muscle memory, a presence felt in empty rooms.",
     meaning:
-      "Life is roulette — not because it's random, but because we assign meaning to where the ball lands. The wheel spins. We choose what it means.",
+      "Grief is not a problem to solve. It is a reliquary we carry — sacred, heavy, and strangely beautiful.",
     curatorNote:
-      "A provocative conclusion. After six works of profound personal narrative, Parejo offers no easy resolution — only the wheel, still turning. The exhibition ends not with answers but with motion.",
+      "Perhaps the emotional heart of the exhibition. Parejo's handling of loss avoids sentimentality while achieving profound tenderness. The butterflies that emerge on hover suggest transformation — the dead becoming something else, something winged.",
     personalText:
-      "I called it meaningless because I stopped trying to control where I'd land. The year took everything and gave me this: the freedom of the spin. Motek. The exhibition. A new cycle beginning.",
+      "When my father passed, I didn't know what to keep. This painting is my answer: you keep the space they occupied. You keep the way the world changed shape around their absence.",
     symbolism:
-      "The roulette wheel connects back to The Empty Bank's coins — fortune, chance, cycles. Its continuous rotation suggests that closing one cycle is the spin that begins the next.",
-    gradient: "from-charcoal via-red-950 to-violet-950",
-    accentColor: "#7C3AED",
-    hoverEffect: "roulette",
+      "The reliquary traditionally holds saintly remains. Here it holds memory — the most fragile and most enduring of all relics.",
+    imageSrc: "/Reliquary.jpeg",
+    imageAlt: "Reliquary artwork showing a heart-like memorial form plated and labeled with personal losses, surrounded by cream and strawberries.",
+    imageFit: "contain",
+    gradient: "from-slate-950 via-gray-900 to-slate-800",
+    accentColor: "#EF4444",
+    hoverEffect: "butterflies",
   },
 ];
 

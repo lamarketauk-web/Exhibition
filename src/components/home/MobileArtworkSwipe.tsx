@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { artworks } from "@/data/artworks";
@@ -54,6 +55,17 @@ export default function MobileArtworkSwipe() {
               <div
                 className={`relative flex min-h-[60vh] flex-col justify-end overflow-hidden rounded-sm bg-gradient-to-br ${artwork.gradient} p-8`}
               >
+                <Image
+                  src={artwork.imageSrc}
+                  alt={artwork.imageAlt}
+                  fill
+                  className={
+                    artwork.imageFit === "contain"
+                      ? "object-contain p-2"
+                      : "object-cover object-center"
+                  }
+                  sizes="100vw"
+                />
                 <div className="absolute inset-0 bg-charcoal/30" />
                 <div className="relative z-10">
                   <span className="text-xs tracking-[0.3em] uppercase opacity-50">

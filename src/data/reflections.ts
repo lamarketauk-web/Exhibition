@@ -27,7 +27,7 @@ export const sampleReflections: Reflection[] = [
   },
   {
     id: "5",
-    text: "The Warmth of Home brought me back to my grandmother's kitchen. The smoke, the amber light — I could smell it.",
+    text: "The Bubble of Home brought me back to my grandmother's kitchen. The smoke, the amber light — I could smell it.",
     date: "May 2025",
   },
 ];

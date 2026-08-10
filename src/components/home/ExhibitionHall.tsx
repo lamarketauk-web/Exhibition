@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { artworks, type Artwork, type HoverEffect } from "@/data/artworks";
@@ -18,7 +19,7 @@ export default function ExhibitionHall() {
           <div className="mx-auto max-w-7xl text-center">
             <p className="text-xs tracking-[0.4em] uppercase opacity-40">The Exhibition</p>
             <h2 className="mt-4 font-display text-4xl tracking-tight md:text-6xl">
-              Seven Rooms
+              Six Rooms
             </h2>
             <p className="mx-auto mt-6 max-w-lg text-sm opacity-50">
               Enter each room. Spend time with each piece. Let the journey unfold.
@@ -27,7 +28,7 @@ export default function ExhibitionHall() {
         </FadeIn>
       </div>
 
-      <div className="hidden flex-col md:flex">
+      <div className="hidden flex-col gap-10 pb-24 md:flex md:px-12 lg:gap-16 lg:pb-32">
         {artworks.map((artwork, i) => (
           <ArtworkRoom key={artwork.slug} artwork={artwork} index={i} />
         ))}
@@ -38,58 +39,128 @@ export default function ExhibitionHall() {
 
 function ArtworkRoom({ artwork, index }: { artwork: Artwork; index: number }) {
   const [isHovered, setIsHovered] = useState(false);
+  const imageOnRight = index % 2 === 0;
 
   return (
-    <FadeIn duration={1.2}>
+    <FadeIn
+      duration={1}
+      direction={imageOnRight ? "left" : "right"}
+      className="mx-auto w-full max-w-7xl"
+    >
       <Link
         href={`/exhibition/${artwork.slug}`}
-        className="group relative block"
+        className="group block"
         data-cursor-hover
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="relative flex min-h-[70vh] items-center overflow-hidden md:min-h-screen">
-          <ArtworkVisual artwork={artwork} isHovered={isHovered} />
-
-          <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-end px-6 pb-16 pt-32 md:px-12 md:pb-24">
+        <article className="overflow-hidden rounded-[2rem] border border-charcoal/10 bg-warm-white/70 shadow-[0_30px_80px_rgba(17,17,17,0.08)] transition-transform duration-500 group-hover:-translate-y-1 dark:border-warm-white/10 dark:bg-[#171717] dark:shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+          <div className="grid items-stretch md:grid-cols-2">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className={`relative flex min-h-[420px] flex-col justify-between px-8 py-10 lg:min-h-[640px] lg:px-14 lg:py-14 xl:px-16 xl:py-16 ${
+                imageOnRight ? "md:order-1" : "md:order-2"
+              }`}
             >
-              <span className="text-xs tracking-[0.3em] uppercase opacity-40">
-                Room {String(index + 1).padStart(2, "0")} &mdash; {artwork.year}
-              </span>
-              <h3 className="mt-3 font-display text-4xl tracking-tight md:text-6xl lg:text-7xl">
-                {artwork.title}
-              </h3>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed opacity-60 md:text-base">
-                {artwork.story}
-              </p>
-              <motion.span
-                className="mt-8 inline-flex items-center gap-2 text-xs tracking-[0.3em] uppercase opacity-40 transition-opacity group-hover:opacity-80"
-                animate={{ x: isHovered ? 8 : 0 }}
-                transition={{ duration: 0.4 }}
-              >
-                Enter Room
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </motion.span>
+              <div className="pointer-events-none absolute top-6 right-6 font-display text-7xl leading-none text-charcoal/[0.06] dark:text-warm-white/[0.05] xl:text-8xl">
+                {String(index + 1).padStart(2, "0")}
+              </div>
+
+              <div className="relative z-10 max-w-xl">
+                <span className="text-xs tracking-[0.35em] uppercase opacity-45">
+                  Room {String(index + 1).padStart(2, "0")} &mdash; {artwork.year}
+                </span>
+                <h3 className="mt-4 font-display text-4xl leading-none tracking-tight lg:text-5xl xl:text-6xl">
+                  {artwork.title}
+                </h3>
+                <p className="mt-6 max-w-lg text-sm leading-7 opacity-65 lg:text-base">
+                  {artwork.story}
+                </p>
+              </div>
+
+              <div className="relative z-10 mt-10 max-w-xl">
+                <div className="border-l border-violet-accent/35 pl-5">
+                  <p className="text-xs tracking-[0.3em] uppercase opacity-40">Meaning</p>
+                  <p className="mt-3 font-display text-xl leading-relaxed opacity-90 lg:text-2xl">
+                    {artwork.meaning}
+                  </p>
+                </div>
+
+                <motion.span
+                  className="mt-8 inline-flex items-center gap-3 text-xs tracking-[0.3em] uppercase opacity-50 transition-opacity group-hover:opacity-90"
+                  animate={{ x: isHovered ? 10 : 0 }}
+                  transition={{ duration: 0.35 }}
+                >
+                  Enter Room
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-current/20">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </motion.span>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className={imageOnRight ? "md:order-2" : "md:order-1"}
+            >
+              <ArtworkVisual artwork={artwork} isHovered={isHovered} index={index} />
             </motion.div>
           </div>
-        </div>
+        </article>
       </Link>
     </FadeIn>
   );
 }
 
-function ArtworkVisual({ artwork, isHovered }: { artwork: Artwork; isHovered: boolean }) {
+function ArtworkVisual({
+  artwork,
+  isHovered,
+  index,
+}: {
+  artwork: Artwork;
+  isHovered: boolean;
+  index: number;
+}) {
   return (
-    <div className={`absolute inset-0 bg-gradient-to-br ${artwork.gradient} artwork-gradient`}>
-      <div className="absolute inset-0 bg-charcoal/30 dark:bg-charcoal/50" />
+    <div
+      className={`relative min-h-[420px] overflow-hidden bg-gradient-to-br ${artwork.gradient} artwork-gradient lg:min-h-[640px]`}
+    >
+      <Image
+        src={artwork.imageSrc}
+        alt={artwork.imageAlt}
+        fill
+        className={`transition-transform duration-[1600ms] ${
+          artwork.imageFit === "contain"
+            ? "object-contain p-6 lg:p-10"
+            : "object-cover object-center"
+        } ${isHovered ? "scale-105" : "scale-100"}`}
+        sizes="(min-width: 1024px) 50vw, 100vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-charcoal/10 via-transparent to-charcoal/55 dark:from-charcoal/20 dark:to-charcoal/70" />
       <HoverEffectLayer effect={artwork.hoverEffect} isHovered={isHovered} accentColor={artwork.accentColor} />
+
+      <div className="pointer-events-none absolute inset-6 border border-warm-white/12" />
+      <div className="absolute right-6 bottom-6 left-6 flex items-end justify-between gap-6">
+        <div>
+          <p className="text-[10px] tracking-[0.35em] uppercase text-warm-white/60">
+            Exhibition Room
+          </p>
+          <p className="mt-2 font-display text-2xl text-warm-white lg:text-3xl">
+            {artwork.title}
+          </p>
+        </div>
+        <p className="font-display text-5xl leading-none text-warm-white/20">
+          {String(index + 1).padStart(2, "0")}
+        </p>
+      </div>
     </div>
   );
 }
@@ -114,8 +185,6 @@ function HoverEffectLayer({
       return <HeartbeatEffect isHovered={isHovered} accentColor={accentColor} />;
     case "warmth":
       return <SmokeEffect isHovered={isHovered} accentColor={accentColor} />;
-    case "roulette":
-      return <RouletteEffect isHovered={isHovered} accentColor={accentColor} />;
     default:
       return <SmokeEffect isHovered={isHovered} accentColor={accentColor} />;
   }
@@ -248,34 +317,6 @@ function SmokeEffect({ isHovered, accentColor }: { isHovered: boolean; accentCol
           }}
         />
       ))}
-    </div>
-  );
-}
-
-function RouletteEffect({ isHovered, accentColor }: { isHovered: boolean; accentColor: string }) {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <motion.div
-        className="relative h-48 w-48 rounded-full border-2 md:h-64 md:w-64"
-        style={{ borderColor: accentColor }}
-        animate={{ rotate: isHovered ? 360 : 0 }}
-        transition={{ duration: 4, ease: "linear", repeat: isHovered ? Infinity : 0 }}
-      >
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute top-1/2 left-1/2 h-1/2 w-px origin-bottom"
-            style={{
-              transform: `rotate(${i * 30}deg)`,
-              backgroundColor: `${accentColor}40`,
-            }}
-          />
-        ))}
-        <div
-          className="absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ backgroundColor: accentColor }}
-        />
-      </motion.div>
     </div>
   );
 }

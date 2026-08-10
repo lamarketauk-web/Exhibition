@@ -1,25 +1,41 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
 export default function ThemeToggle() {
+  const pathname = usePathname();
   const [isDark, setIsDark] = useState(true);
+  const isExhibitionRoute =
+    pathname === "/" || pathname.startsWith("/exhibition/");
 
   useEffect(() => {
-    const stored = localStorage.getItem("theme");
+    if (!isExhibitionRoute) {
+      setIsDark(true);
+      document.documentElement.classList.add("dark");
+      return;
+    }
+
+    const stored = localStorage.getItem("exhibition-theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const dark = stored ? stored === "dark" : prefersDark;
     setIsDark(dark);
     document.documentElement.classList.toggle("dark", dark);
-  }, []);
+  }, [isExhibitionRoute]);
 
   const toggle = () => {
+    if (!isExhibitionRoute) return;
+
     const next = !isDark;
     setIsDark(next);
     document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
+    localStorage.setItem("exhibition-theme", next ? "dark" : "light");
   };
+
+  if (!isExhibitionRoute) {
+    return null;
+  }
 
   return (
     <button

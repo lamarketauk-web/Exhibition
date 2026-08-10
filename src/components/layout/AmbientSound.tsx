@@ -1,14 +1,100 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+
+const AUDIO_SRC = "/rosalia_v2.mp3";
+const STORAGE_KEY = "exhibition-ambient-sound-muted";
+const DEFAULT_VOLUME = 0.18;
+
+let sharedAudio: HTMLAudioElement | null = null;
+let sharedMuted = true;
+const subscribers = new Set<(muted: boolean) => void>();
+
+function notifySubscribers() {
+  // ds
+  subscribers.forEach((subscriber) => subscriber(sharedMuted));
+}
+
+function ensureAudio() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  if (!sharedAudio) {
+    sharedAudio = new Audio(AUDIO_SRC);
+    sharedAudio.loop = true;
+    sharedAudio.preload = "auto";
+    sharedAudio.muted = sharedMuted;
+  }
+
+  sharedAudio.volume = DEFAULT_VOLUME;
+
+  return sharedAudio;
+}
 
 export default function AmbientSound() {
   const [isMuted, setIsMuted] = useState(true);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedMuted = window.localStorage.getItem(STORAGE_KEY);
+      if (storedMuted !== null) {
+        sharedMuted = storedMuted === "true";
+      }
+    }
+
+    const audio = ensureAudio();
+    if (audio) {
+      audio.muted = sharedMuted;
+    }
+
+    setIsMuted(sharedMuted);
+
+    const handleMuteChange = (muted: boolean) => setIsMuted(muted);
+    subscribers.add(handleMuteChange);
+
+    return () => {
+      subscribers.delete(handleMuteChange);
+    };
+  }, []);
+
+  const toggleSound = async () => {
+    const audio = ensureAudio();
+    if (!audio) return;
+
+    const nextMuted = !sharedMuted;
+    sharedMuted = nextMuted;
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(STORAGE_KEY, String(nextMuted));
+    }
+
+    if (nextMuted) {
+      audio.muted = true;
+      audio.pause();
+    } else {
+      audio.muted = false;
+
+      try {
+        await audio.play();
+      } catch {
+        sharedMuted = true;
+        audio.muted = true;
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem(STORAGE_KEY, "true");
+        }
+      }
+    }
+
+    notifySubscribers();
+  };
+
   return (
     <button
-      onClick={() => setIsMuted(!isMuted)}
+      onClick={() => {
+        void toggleSound();
+      }}
       aria-label={isMuted ? "Enable ambient sound" : "Mute ambient sound"}
       className="group flex items-center gap-2 rounded-full border border-charcoal/10 px-4 py-2 text-xs tracking-widest uppercase transition-colors hover:border-violet-accent/50 dark:border-warm-white/10"
       data-cursor-hover
