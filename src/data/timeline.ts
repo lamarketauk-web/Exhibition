@@ -51,6 +51,6 @@ export const timelineEvents: TimelineEvent[] = [
     year: "2026",
     title: "The Exhibition",
     description:
-      "2025: A Year of Closing Cycles — six works documenting the journey from loss through grief to rebirth.",
+      "2026: A Year of Closing Cycles — six works documenting the journey from loss through grief to rebirth.",
   },
 ];
