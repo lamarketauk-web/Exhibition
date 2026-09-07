@@ -48,7 +48,7 @@ export const timelineEvents: TimelineEvent[] = [
       "A turning point. New beginnings emerging from the ashes of closing cycles. The wheel begins to spin again.",
   },
   {
-    year: "2025",
+    year: "2026",
     title: "The Exhibition",
     description:
       "2025: A Year of Closing Cycles — six works documenting the journey from loss through grief to rebirth.",
