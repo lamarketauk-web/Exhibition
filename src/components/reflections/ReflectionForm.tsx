@@ -11,18 +11,26 @@ interface Reflection {
   created_at: string;
 }
 
+interface ReflectionPage {
+  reflections: Reflection[];
+  hasMore: boolean;
+}
+
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString("en-GB", { month: "long", year: "numeric" });
 }
 
 export default function ReflectionForm() {
   const [reflections, setReflections] = useState<Reflection[]>([]);
+  const [hasMore, setHasMore] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [newReflection, setNewReflection] = useState("");
   const [consent, setConsent] = useState(false);
   const [website, setWebsite] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [moreError, setMoreError] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
@@ -30,13 +38,16 @@ export default function ReflectionForm() {
   useEffect(() => {
     let active = true;
 
-    fetch("/api/reflections")
+    fetch("/api/reflections?offset=0")
       .then(async (response) => {
         if (!response.ok) throw new Error("Could not load reflections");
-        return (await response.json()) as Reflection[];
+        return (await response.json()) as ReflectionPage;
       })
       .then((data) => {
-        if (active) setReflections(data);
+        if (active) {
+          setReflections(data.reflections);
+          setHasMore(data.hasMore);
+        }
       })
       .catch(() => {
         if (active) setLoadError(true);
@@ -49,6 +60,25 @@ export default function ReflectionForm() {
       active = false;
     };
   }, []);
+
+  const loadMore = async () => {
+    if (!hasMore || loadingMore) return;
+
+    setLoadingMore(true);
+    setMoreError(false);
+    try {
+      const response = await fetch(`/api/reflections?offset=${reflections.length}`);
+      const data = (await response.json()) as ReflectionPage;
+      if (!response.ok) throw new Error("Could not load more reflections");
+
+      setReflections((current) => [...current, ...data.reflections]);
+      setHasMore(data.hasMore);
+    } catch {
+      setMoreError(true);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -192,6 +222,20 @@ export default function ReflectionForm() {
               </motion.blockquote>
             </FadeIn>
           ))}
+          {!loading && !loadError && hasMore && (
+            <div className="mt-4 flex flex-col items-center gap-3">
+              <button
+                type="button"
+                onClick={loadMore}
+                disabled={loadingMore}
+                className="border border-charcoal/20 px-8 py-3 text-xs tracking-[0.3em] uppercase transition-all hover:border-violet-accent disabled:opacity-40 dark:border-warm-white/20"
+                data-cursor-hover
+              >
+                {loadingMore ? "Loading…" : "See more reflections"}
+              </button>
+              {moreError && <p role="status" className="text-sm opacity-50">Could not load more reflections. Please try again.</p>}
+            </div>
+          )}
         </div>
       </div>
     </section>

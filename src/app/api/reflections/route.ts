@@ -5,6 +5,7 @@ export const dynamic = "force-dynamic";
 const MAX_NAME_LENGTH = 80;
 const MAX_EMAIL_LENGTH = 254;
 const MAX_REFLECTION_LENGTH = 2000;
+const REFLECTIONS_PAGE_SIZE = 20;
 
 function getSupabaseConfig() {
   const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
@@ -18,16 +19,22 @@ function unavailable() {
   return NextResponse.json({ error: "Reflections are not available right now." }, { status: 503 });
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   const config = getSupabaseConfig();
   if (!config) return unavailable();
+
+  const offset = Number(new URL(request.url).searchParams.get("offset") ?? "0");
+  if (!Number.isSafeInteger(offset) || offset < 0) {
+    return NextResponse.json({ error: "Invalid page." }, { status: 400 });
+  }
 
   try {
     const query = new URLSearchParams({
       select: "id,name,text,created_at",
       status: "eq.approved",
-      order: "created_at.desc",
-      limit: "100",
+      order: "created_at.desc,id.asc",
+      limit: String(REFLECTIONS_PAGE_SIZE + 1),
+      offset: String(offset),
     });
     const response = await fetch(`${config.url}/rest/v1/reflections?${query}`, {
       headers: {
@@ -38,7 +45,11 @@ export async function GET() {
     });
 
     if (!response.ok) return unavailable();
-    return NextResponse.json(await response.json(), {
+    const rows = (await response.json()) as Array<{ id: string; name: string; text: string; created_at: string }>;
+    return NextResponse.json({
+      reflections: rows.slice(0, REFLECTIONS_PAGE_SIZE),
+      hasMore: rows.length > REFLECTIONS_PAGE_SIZE,
+    }, {
       headers: { "Cache-Control": "no-store, max-age=0" },
     });
   } catch {

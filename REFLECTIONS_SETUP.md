@@ -20,4 +20,4 @@ Add the same `SUPABASE_URL` and `SUPABASE_SECRET_KEY` values as environment vari
 
 Open the `reflections` table in Supabase's **Table Editor**. Review pending rows, then change a row's `status` from `pending` to `approved` to publish it, or to `rejected` to keep it off the public page. The visitor's email remains in the table and is never shown on the site.
 
-The public page displays up to 100 approved reflections, newest first. The form requires a name, email address, and consent to publish the name and reflection. It also uses length limits and a hidden honeypot field; add a stronger rate limit or CAPTCHA if automated spam becomes a problem.
+The public page displays approved reflections, newest first, 20 at a time. A **See more reflections** button appears when another page is available. The form requires a name, email address, and consent to publish the name and reflection. It also uses length limits and a hidden honeypot field; add a stronger rate limit or CAPTCHA if automated spam becomes a problem.
