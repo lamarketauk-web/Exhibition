@@ -97,20 +97,29 @@ export async function POST(request: Request) {
   }
 
   try {
-    const response = await fetch(`${config.url}/rest/v1/reflections`, {
+    const insertQuery = new URLSearchParams({ select: "id,name,text,created_at" });
+    const response = await fetch(`${config.url}/rest/v1/reflections?${insertQuery}`, {
       method: "POST",
       headers: {
         apikey: config.secretKey,
         Authorization: `Bearer ${config.secretKey}`,
         "Content-Type": "application/json",
-        Prefer: "return=minimal",
+        Prefer: "return=representation",
       },
-      body: JSON.stringify({ name, email, text, status: "pending" }),
+      body: JSON.stringify({ name, email, text, status: "approved" }),
       cache: "no-store",
     });
 
     if (!response.ok) return unavailable();
-    return NextResponse.json({ ok: true }, { status: 202 });
+    const created = (await response.json()) as Array<{
+      id: string;
+      name: string;
+      text: string;
+      created_at: string;
+    }>;
+    if (!created[0]) return unavailable();
+
+    return NextResponse.json(created[0], { status: 201 });
   } catch {
     return unavailable();
   }

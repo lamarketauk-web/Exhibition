@@ -3,11 +3,12 @@ create table if not exists public.reflections (
   name text not null check (char_length(name) between 1 and 80),
   email text check (email is null or char_length(email) <= 254),
   text text not null check (char_length(text) between 1 and 2000),
-  status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  status text not null default 'approved' check (status in ('pending', 'approved', 'rejected')),
   created_at timestamptz not null default now()
 );
 
 alter table public.reflections enable row level security;
+alter table public.reflections alter column status set default 'approved';
 revoke all on table public.reflections from anon, authenticated;
 grant all on table public.reflections to service_role;
 

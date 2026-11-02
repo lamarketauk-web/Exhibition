@@ -93,15 +93,16 @@ export default function ReflectionForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, text: newReflection, consent, website }),
       });
-      const result = (await response.json()) as { error?: string };
+      const result = (await response.json()) as Reflection & { error?: string };
 
       if (!response.ok) throw new Error(result.error || "Your reflection could not be sent.");
 
+      setReflections((current) => [result, ...current]);
       setName("");
       setEmail("");
       setNewReflection("");
       setConsent(false);
-      setMessage("Thank you. Your reflection has been sent for approval.");
+      setMessage("Thank you. Your reflection is now published.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Your reflection could not be sent.");
     } finally {
@@ -116,7 +117,7 @@ export default function ReflectionForm() {
           <p className="text-xs tracking-[0.4em] uppercase opacity-40">Visitor Reflections</p>
           <h2 className="mt-4 font-display text-4xl tracking-tight md:text-5xl">What Stayed With You</h2>
           <p className="mt-6 text-sm opacity-50">
-            Share what the exhibition brought up for you. Your reflection will be reviewed before it appears here.
+            Share what the exhibition brought up for you. Your reflection will appear here as soon as you submit it.
           </p>
         </FadeIn>
 
@@ -171,7 +172,7 @@ export default function ReflectionForm() {
                 onChange={(event) => setConsent(event.target.checked)}
                 className="mt-0.5 accent-violet-accent"
               />
-              <span>I understand my name and reflection may be published. My email address will not be shown.</span>
+              <span>I understand my name and reflection will be published. My email address will not be shown.</span>
             </label>
 
             <div aria-hidden="true" className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden">
